@@ -1,0 +1,656 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billieball - HIT ME HARD AND SOFT Tour Predictions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'billie-black': '#0A0A0A',
+                        'billie-dark': '#1A1A1A',
+                        'billie-gray': '#2A2A2A',
+                        'billie-pink': '#FF69B4',
+                        'billie-green': '#00FF88',
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'float': 'float 6s ease-in-out infinite',
+                    }
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @keyframes glow {
+            from { box-shadow: 0 0 20px #FF69B4; }
+            to { box-shadow: 0 0 30px #FF69B4, 0 0 40px #FF69B4; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .neon-border {
+            border: 2px solid transparent;
+            background: linear-gradient(#1A1A1A, #1A1A1A) padding-box,
+                        linear-gradient(45deg, #FF69B4, #00FF88) border-box;
+        }
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(26, 26, 26, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-billie-black text-white font-inter min-h-screen">
+    <!-- Background Pattern -->
+    <!-- A dark concert stage with dramatic lighting and silhouettes -->
+    <div class="fixed inset-0 opacity-20 bg-cover bg-center bg-no-repeat" 
+         style="background-image: url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080');">
+    </div>
+    
+    <!-- Navigation Header -->
+    <nav class="relative z-50 bg-billie-dark/90 backdrop-blur-md border-b border-billie-gray">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-music text-billie-pink text-2xl"></i>
+                    <h1 class="text-2xl font-bold bg-gradient-to-r from-billie-pink to-billie-green bg-clip-text text-transparent">
+                        Billieball
+                    </h1>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#game" class="text-white hover:text-billie-pink transition-colors">Game</a>
+                    <a href="#leaderboard" class="text-white hover:text-billie-pink transition-colors">Leaderboard</a>
+                    <a href="#history" class="text-white hover:text-billie-pink transition-colors">History</a>
+                    <a href="#admin" class="text-white hover:text-billie-pink transition-colors">Admin</a>
+                </div>
+                <button class="md:hidden text-white">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="relative z-10">
+        
+        <!-- Player Setup Section -->
+        <!-- @COMPONENT: PlayerSetup [handles initial player name entry] -->
+        <section id="player-setup" class="min-h-screen flex items-center justify-center px-4">
+            <div class="max-w-md w-full">
+                <div class="glass-effect neon-border rounded-2xl p-8 text-center animate-float">
+                    <div class="mb-8">
+                        <i class="fas fa-users text-6xl text-billie-green mb-4"></i>
+                        <h2 class="text-3xl font-bold mb-2">Welcome to Billieball</h2>
+                        <p class="text-gray-300">Enter player names to start predicting!</p>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-billie-pink mb-2">Player 1</label>
+                            <input type="text" placeholder="Enter nickname..." 
+                                   data-bind="player1.name"
+                                   class="w-full px-4 py-3 bg-billie-gray border border-billie-pink/30 rounded-lg focus:border-billie-pink focus:outline-none transition-colors">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-billie-green mb-2">Player 2</label>
+                            <input type="text" placeholder="Enter nickname..." 
+                                   data-bind="player2.name"
+                                   class="w-full px-4 py-3 bg-billie-gray border border-billie-green/30 rounded-lg focus:border-billie-green focus:outline-none transition-colors">
+                        </div>
+                        
+                        <button data-event="click:startGame" 
+                                class="w-full py-4 bg-gradient-to-r from-billie-pink to-billie-green text-white font-bold rounded-lg hover:from-billie-pink/80 hover:to-billie-green/80 transition-all transform hover:scale-105">
+                            Start Playing
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: PlayerSetup -->
+
+        <!-- Tour Selection Section -->
+        <!-- @COMPONENT: TourSelection [displays available tour dates] -->
+        <section id="tour-selection" class="py-20 px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-billie-pink to-billie-green bg-clip-text text-transparent">
+                        Choose Your Show
+                    </h2>
+                    <p class="text-xl text-gray-300">HIT ME HARD AND SOFT World Tour</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Japan Shows -->
+                    <div class="glass-effect neon-border rounded-2xl p-6">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-flag text-billie-pink text-2xl mr-3"></i>
+                            <h3 class="text-2xl font-bold">Japan</h3>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="bg-billie-gray rounded-lg p-4 hover:bg-billie-gray/70 cursor-pointer transition-colors"
+                                 data-event="click:selectShow" data-show-id="japan-aug16">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <p class="font-semibold">Saitama Super Arena</p>
+                                        <p class="text-gray-400">August 16, 2025</p>
+                                    </div>
+                                    <span class="text-billie-green">
+                                        <i class="fas fa-play-circle"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="bg-billie-gray rounded-lg p-4 hover:bg-billie-gray/70 cursor-pointer transition-colors"
+                                 data-event="click:selectShow" data-show-id="japan-aug17">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <p class="font-semibold">Saitama Super Arena</p>
+                                        <p class="text-gray-400">August 17, 2025</p>
+                                    </div>
+                                    <span class="text-billie-green">
+                                        <i class="fas fa-play-circle"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- North America Shows -->
+                    <div class="glass-effect neon-border rounded-2xl p-6">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-flag-usa text-billie-green text-2xl mr-3"></i>
+                            <h3 class="text-2xl font-bold">North America</h3>
+                        </div>
+                        <div class="space-y-2 max-h-64 overflow-y-auto">
+                            <!-- @MAP: northAmericaShows.map(show => ( -->
+                            <div class="bg-billie-gray rounded-lg p-3 hover:bg-billie-gray/70 cursor-pointer transition-colors text-sm"
+                                 data-event="click:selectShow" data-show-id="miami-oct15">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <p class="font-semibold" data-bind="show.city">Miami</p>
+                                        <p class="text-gray-400" data-bind="show.date">October 15, 2025</p>
+                                    </div>
+                                    <span class="text-billie-pink">
+                                        <i class="fas fa-play-circle"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- Additional cities would be mapped here -->
+                            <div class="bg-billie-gray rounded-lg p-3 hover:bg-billie-gray/70 cursor-pointer transition-colors text-sm">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <p class="font-semibold">Orlando</p>
+                                        <p class="text-gray-400">October 18, 2025</p>
+                                    </div>
+                                    <span class="text-billie-pink">
+                                        <i class="fas fa-play-circle"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="bg-billie-gray rounded-lg p-3 hover:bg-billie-gray/70 cursor-pointer transition-colors text-sm">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <p class="font-semibold">Los Angeles</p>
+                                        <p class="text-gray-400">November 22, 2025</p>
+                                    </div>
+                                    <span class="text-billie-pink">
+                                        <i class="fas fa-play-circle"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- @END_MAP )) -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: TourSelection -->
+
+        <!-- Prediction Questions Section -->
+        <!-- @COMPONENT: PredictionQuestions [main game interface] -->
+        <section id="game" class="py-20 px-4 bg-billie-dark/50">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold mb-4">Make Your Predictions</h2>
+                    <p class="text-gray-300">Answer all 7 questions before the show starts!</p>
+                    <div class="mt-4 flex justify-center space-x-8">
+                        <div class="text-center">
+                            <p class="text-billie-pink font-bold" data-bind="player1.name">Player 1</p>
+                            <p class="text-2xl font-bold" data-bind="player1.score">0</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-billie-green font-bold" data-bind="player2.name">Player 2</p>
+                            <p class="text-2xl font-bold" data-bind="player2.score">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question Cards -->
+                <div class="space-y-8">
+                    <!-- Question 1 -->
+                    <div class="glass-effect neon-border rounded-2xl p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold">Will Billie wear a cap?</h3>
+                            <span class="bg-billie-pink px-3 py-1 rounded-full text-sm font-bold">2 pts</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button class="p-4 bg-billie-gray hover:bg-billie-pink/20 border border-transparent hover:border-billie-pink rounded-lg transition-all"
+                                    data-event="click:selectAnswer" data-question="cap" data-answer="yes">
+                                <i class="fas fa-check text-billie-green mr-2"></i>
+                                Yes
+                            </button>
+                            <button class="p-4 bg-billie-gray hover:bg-billie-pink/20 border border-transparent hover:border-billie-pink rounded-lg transition-all"
+                                    data-event="click:selectAnswer" data-question="cap" data-answer="no">
+                                <i class="fas fa-times text-red-400 mr-2"></i>
+                                No
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="glass-effect neon-border rounded-2xl p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold">Will the shirt have her name?</h3>
+                            <span class="bg-billie-green px-3 py-1 rounded-full text-sm font-bold">3 pts</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button class="p-4 bg-billie-gray hover:bg-billie-green/20 border border-transparent hover:border-billie-green rounded-lg transition-all">
+                                <i class="fas fa-check text-billie-green mr-2"></i>
+                                Yes
+                            </button>
+                            <button class="p-4 bg-billie-gray hover:bg-billie-green/20 border border-transparent hover:border-billie-green rounded-lg transition-all">
+                                <i class="fas fa-times text-red-400 mr-2"></i>
+                                No
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Question 3 - Shirt Color -->
+                    <div class="glass-effect neon-border rounded-2xl p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold">Shirt color?</h3>
+                            <span class="bg-yellow-500 px-3 py-1 rounded-full text-sm font-bold text-black">7 pts</span>
+                        </div>
+                        <div class="grid grid-cols-4 sm:grid-cols-8 gap-3">
+                            <button class="p-3 bg-pink-500 hover:scale-110 rounded-lg transition-all" data-color="pink"></button>
+                            <button class="p-3 bg-red-500 hover:scale-110 rounded-lg transition-all" data-color="red"></button>
+                            <button class="p-3 bg-green-500 hover:scale-110 rounded-lg transition-all" data-color="green"></button>
+                            <button class="p-3 bg-black border border-white hover:scale-110 rounded-lg transition-all" data-color="black"></button>
+                            <button class="p-3 bg-blue-500 hover:scale-110 rounded-lg transition-all" data-color="blue"></button>
+                            <button class="p-3 bg-gray-500 hover:scale-110 rounded-lg transition-all" data-color="gray"></button>
+                            <button class="p-3 bg-white hover:scale-110 rounded-lg transition-all" data-color="white"></button>
+                            <button class="p-3 bg-gradient-to-r from-billie-pink to-billie-green hover:scale-110 rounded-lg transition-all" data-color="stripes"></button>
+                        </div>
+                    </div>
+
+                    <!-- Question 4 -->
+                    <div class="glass-effect neon-border rounded-2xl p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold">What song after SKINNY?</h3>
+                            <span class="bg-billie-pink px-3 py-1 rounded-full text-sm font-bold">5 pts</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button class="p-4 bg-billie-gray hover:bg-billie-pink/20 border border-transparent hover:border-billie-pink rounded-lg transition-all text-left">
+                                <i class="fas fa-music text-billie-pink mr-2"></i>
+                                Male Fantasy
+                            </button>
+                            <button class="p-4 bg-billie-gray hover:bg-billie-pink/20 border border-transparent hover:border-billie-pink rounded-lg transition-all text-left">
+                                <i class="fas fa-tv text-billie-pink mr-2"></i>
+                                TV
+                            </button>
+                            <button class="p-4 bg-billie-gray hover:bg-billie-pink/20 border border-transparent hover:border-billie-pink rounded-lg transition-all text-left">
+                                <i class="fas fa-star text-billie-pink mr-2"></i>
+                                Halley's Comet
+                            </button>
+                            <button class="p-4 bg-billie-gray hover:bg-billie-pink/20 border border-transparent hover:border-billie-pink rounded-lg transition-all text-left">
+                                <i class="fas fa-microphone text-billie-pink mr-2"></i>
+                                Cover Song
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Questions 5-7 (condensed for space) -->
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="glass-effect neon-border rounded-xl p-4">
+                            <div class="flex justify-between items-start mb-3">
+                                <h4 class="font-bold text-sm">Sing L'AMOUR first part?</h4>
+                                <span class="bg-billie-green px-2 py-1 rounded text-xs font-bold">3 pts</span>
+                            </div>
+                            <div class="space-y-2">
+                                <button class="w-full p-2 bg-billie-gray hover:bg-billie-green/20 rounded text-sm">Yes</button>
+                                <button class="w-full p-2 bg-billie-gray hover:bg-billie-green/20 rounded text-sm">No</button>
+                            </div>
+                        </div>
+                        
+                        <div class="glass-effect neon-border rounded-xl p-4">
+                            <div class="flex justify-between items-start mb-3">
+                                <h4 class="font-bold text-sm">Surprise guest?</h4>
+                                <span class="bg-billie-pink px-2 py-1 rounded text-xs font-bold">2 pts</span>
+                            </div>
+                            <div class="space-y-2">
+                                <button class="w-full p-2 bg-billie-gray hover:bg-billie-pink/20 rounded text-sm">Yes</button>
+                                <button class="w-full p-2 bg-billie-gray hover:bg-billie-pink/20 rounded text-sm">No</button>
+                            </div>
+                        </div>
+                        
+                        <div class="glass-effect neon-border rounded-xl p-4">
+                            <div class="flex justify-between items-start mb-3">
+                                <h4 class="font-bold text-sm">Change setlist?</h4>
+                                <span class="bg-billie-green px-2 py-1 rounded text-xs font-bold">2 pts</span>
+                            </div>
+                            <div class="space-y-2">
+                                <button class="w-full p-2 bg-billie-gray hover:bg-billie-green/20 rounded text-sm">Yes</button>
+                                <button class="w-full p-2 bg-billie-gray hover:bg-billie-green/20 rounded text-sm">No</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center mt-12">
+                    <button class="px-8 py-4 bg-gradient-to-r from-billie-pink to-billie-green text-white font-bold text-xl rounded-xl hover:from-billie-pink/80 hover:to-billie-green/80 transition-all transform hover:scale-105 animate-glow">
+                        Submit Predictions
+                    </button>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: PredictionQuestions -->
+
+        <!-- Live Leaderboard Section -->
+        <!-- @COMPONENT: LiveLeaderboard [real-time score display] -->
+        <section id="leaderboard" class="py-20 px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-billie-pink to-billie-green bg-clip-text text-transparent">
+                        Live Leaderboard
+                    </h2>
+                    <p class="text-gray-300">Real-time scores during the show</p>
+                    <div class="mt-4">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-billie-green/20 text-billie-green">
+                            <span class="w-2 h-2 bg-billie-green rounded-full animate-pulse mr-2"></span>
+                            Live Updates
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Current Leader -->
+                <div class="glass-effect neon-border rounded-2xl p-8 mb-8 text-center animate-glow">
+                    <div class="mb-4">
+                        <i class="fas fa-crown text-yellow-400 text-4xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2" data-bind="currentLeader.name">Sarah</h3>
+                    <p class="text-4xl font-bold text-billie-pink" data-bind="currentLeader.score">18</p>
+                    <p class="text-gray-400 mt-2">Current Leader</p>
+                </div>
+
+                <!-- Scores Breakdown -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="glass-effect rounded-xl p-6 border-l-4 border-billie-pink">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-xl font-bold" data-bind="player1.name">Sarah</h4>
+                            <span class="text-2xl font-bold text-billie-pink" data-bind="player1.totalScore">18</span>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span>Cap question:</span>
+                                <span class="text-billie-green">+2 pts</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Name on shirt:</span>
+                                <span class="text-billie-green">+3 pts</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Shirt color:</span>
+                                <span class="text-billie-green">+7 pts</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Song after SKINNY:</span>
+                                <span class="text-billie-green">+5 pts</span>
+                            </div>
+                            <div class="flex justify-between text-gray-400">
+                                <span>L'AMOUR first part:</span>
+                                <span>Pending...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-effect rounded-xl p-6 border-l-4 border-billie-green">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-xl font-bold" data-bind="player2.name">Mike</h4>
+                            <span class="text-2xl font-bold text-billie-green" data-bind="player2.totalScore">12</span>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span>Cap question:</span>
+                                <span class="text-red-400">+0 pts</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Name on shirt:</span>
+                                <span class="text-billie-green">+3 pts</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Shirt color:</span>
+                                <span class="text-red-400">+0 pts</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Song after SKINNY:</span>
+                                <span class="text-billie-green">+5 pts</span>
+                            </div>
+                            <div class="flex justify-between text-gray-400">
+                                <span>L'AMOUR first part:</span>
+                                <span>Pending...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: LiveLeaderboard -->
+
+        <!-- Admin Panel Section -->
+        <!-- @COMPONENT: AdminPanel [for updating correct answers] -->
+        <section id="admin" class="py-20 px-4 bg-billie-dark/50">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold mb-4 text-red-400">Admin Panel</h2>
+                    <p class="text-gray-300">Update correct answers during the show</p>
+                </div>
+
+                <!-- Admin Login -->
+                <div class="glass-effect neon-border rounded-2xl p-8 mb-8">
+                    <div class="max-w-md mx-auto">
+                        <div class="mb-6 text-center">
+                            <i class="fas fa-shield-alt text-red-400 text-3xl mb-4"></i>
+                            <h3 class="text-xl font-bold">Admin Access Required</h3>
+                        </div>
+                        <div class="space-y-4">
+                            <input type="password" placeholder="Admin Password" 
+                                   class="w-full px-4 py-3 bg-billie-gray border border-red-400/30 rounded-lg focus:border-red-400 focus:outline-none">
+                            <button class="w-full py-3 bg-red-400 hover:bg-red-500 text-white font-bold rounded-lg transition-colors">
+                                Login to Admin
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Controls (shown after login) -->
+                <div class="space-y-6 opacity-50">
+                    <div class="glass-effect rounded-xl p-6">
+                        <h4 class="text-lg font-bold mb-4 flex items-center">
+                            <i class="fas fa-edit text-billie-pink mr-2"></i>
+                            Update Correct Answers
+                        </h4>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Cap Question</label>
+                                <select class="w-full px-3 py-2 bg-billie-gray border border-billie-pink/30 rounded">
+                                    <option>Select Answer...</option>
+                                    <option>Yes</option>
+                                    <option>No</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Name on Shirt</label>
+                                <select class="w-full px-3 py-2 bg-billie-gray border border-billie-green/30 rounded">
+                                    <option>Select Answer...</option>
+                                    <option>Yes</option>
+                                    <option>No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="mt-4 px-6 py-2 bg-billie-pink hover:bg-billie-pink/80 text-white font-bold rounded-lg transition-colors">
+                            Update Scores
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: AdminPanel -->
+
+        <!-- History Section -->
+        <!-- @COMPONENT: GameHistory [past games and scores] -->
+        <section id="history" class="py-20 px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-billie-pink to-billie-green bg-clip-text text-transparent">
+                        Game History
+                    </h2>
+                    <p class="text-gray-300">Past shows and final scores</p>
+                </div>
+
+                <!-- History Cards -->
+                <div class="space-y-6">
+                    <!-- @MAP: gameHistory.map(game => ( -->
+                    <div class="glass-effect neon-border rounded-xl p-6">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold" data-bind="game.venue">Saitama Super Arena</h3>
+                                <p class="text-gray-400" data-bind="game.date">August 16, 2025</p>
+                            </div>
+                            <div class="mt-4 md:mt-0">
+                                <span class="bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-bold">
+                                    <i class="fas fa-trophy mr-1"></i>
+                                    <span data-bind="game.winner">Sarah</span> Won!
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-billie-gray/50 rounded-lg p-4">
+                                <div class="flex justify-between items-center mb-3">
+                                    <h4 class="font-bold" data-bind="game.player1.name">Sarah</h4>
+                                    <span class="text-2xl font-bold text-billie-pink" data-bind="game.player1.finalScore">22</span>
+                                </div>
+                                <div class="text-sm space-y-1">
+                                    <div class="flex justify-between">
+                                        <span>Correct predictions:</span>
+                                        <span class="text-billie-green" data-bind="game.player1.correctPredictions">6/7</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Total points:</span>
+                                        <span data-bind="game.player1.totalPoints">22</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-billie-gray/50 rounded-lg p-4">
+                                <div class="flex justify-between items-center mb-3">
+                                    <h4 class="font-bold" data-bind="game.player2.name">Mike</h4>
+                                    <span class="text-2xl font-bold text-billie-green" data-bind="game.player2.finalScore">15</span>
+                                </div>
+                                <div class="text-sm space-y-1">
+                                    <div class="flex justify-between">
+                                        <span>Correct predictions:</span>
+                                        <span class="text-billie-green" data-bind="game.player2.correctPredictions">4/7</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Total points:</span>
+                                        <span data-bind="game.player2.totalPoints">15</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_MAP )) -->
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: GameHistory -->
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="relative z-10 bg-billie-dark border-t border-billie-gray py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-gray-400 mb-4">
+                Billieball - HIT ME HARD AND SOFT Tour Predictions
+            </p>
+            <div class="flex justify-center space-x-6 text-sm">
+                <a href="#" class="text-gray-400 hover:text-billie-pink transition-colors">Privacy</a>
+                <a href="#" class="text-gray-400 hover:text-billie-pink transition-colors">Terms</a>
+                <a href="#" class="text-gray-400 hover:text-billie-pink transition-colors">Support</a>
+            </div>
+            <p class="text-xs text-gray-500 mt-4">
+                <!-- @STATE: gameState:string = "setup" | "playing" | "live" | "finished" -->
+                <!-- @FUNCTIONALITY: Real-time updates via WebSocket or polling every 5 seconds during live shows -->
+                © 2025 Billieball. Not affiliated with Billie Eilish or official tour.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // TODO: Implement real-time WebSocket connections for live score updates
+        // TODO: Add form validation for player name inputs
+        // TODO: Implement game state management (setup -> playing -> live -> finished)
+        // TODO: Add local storage for player preferences and game history
+        // TODO: Implement admin authentication and answer submission
+        // TODO: Add responsive mobile navigation menu
+        
+        (function() {
+            // Basic interaction handling for demo purposes
+            let gameState = 'setup';
+            let currentPlayers = { player1: '', player2: '' };
+            let selectedAnswers = {};
+            
+            // Simple state management
+            function updateGameState(newState) {
+                gameState = newState;
+                console.log('Game state updated to:', newState);
+            }
+            
+            // Demo interaction handlers
+            document.addEventListener('click', function(e) {
+                if (e.target.hasAttribute('data-event')) {
+                    const event = e.target.getAttribute('data-event');
+                    console.log('Event triggered:', event);
+                    
+                    // Handle different events
+                    if (event === 'click:startGame') {
+                        updateGameState('tour-selection');
+                    } else if (event === 'click:selectShow') {
+                        updateGameState('predictions');
+                    } else if (event.includes('selectAnswer')) {
+                        e.target.classList.toggle('bg-billie-pink/30');
+                    }
+                }
+            });
+            
+            // Simulate real-time updates
+            setInterval(function() {
+                if (gameState === 'live') {
+                    // Simulate score updates during live show
+                    console.log('Checking for live updates...');
+                }
+            }, 5000);
+        })();
+    </script>
+</body>
+</html>
